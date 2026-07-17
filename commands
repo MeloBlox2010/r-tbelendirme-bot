@@ -1,0 +1,48 @@
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName("kurulum")
+        .setDescription("Roblox grup bağlantısını yapar.")
+        .addStringOption(option =>
+            option
+                .setName("grup_id")
+                .setDescription("Roblox grup ID")
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+                .setName("api_key")
+                .setDescription("Roblox API anahtarı")
+                .setRequired(true)
+        ),
+
+    async execute(interaction) {
+
+        // Sadece sunucu yöneticisi kullanabilsin
+        if (!interaction.member.permissions.has("Administrator")) {
+            return interaction.reply({
+                content: "❌ Bu komutu sadece yöneticiler kullanabilir.",
+                ephemeral: true
+            });
+        }
+
+        const grupID = interaction.options.getString("grup_id");
+        const apiKey = interaction.options.getString("api_key");
+
+        // Şimdilik test amaçlı gösteriyoruz
+        const embed = new EmbedBuilder()
+            .setTitle("✅ Kurulum Tamamlandı")
+            .setDescription(
+                `Roblox grup bağlantısı yapıldı.\n\n` +
+                `🪖 Grup ID: ${grupID}\n` +
+                `🔑 API Key: Kaydedildi`
+            )
+            .setColor("Green");
+
+        await interaction.reply({
+            embeds: [embed],
+            ephemeral: true
+        });
+    }
+};
